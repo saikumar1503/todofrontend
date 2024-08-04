@@ -1,25 +1,45 @@
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import Login from "./components/Login";
+import Register from "./components/Register";
+import TodoList from "./components/TodoList";
+import "./index.css";
 
-function App() {
+const App = () => {
+  const [token, setToken] = useState("");
+  const [view, setView] = useState("login");
+
+  const handleLogin = (token) => {
+    setToken(token);
+    setView("todos");
+  };
+
+  const handleLogout = () => {
+    setToken("");
+    setView("login");
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+    <div className="app">
+      {view === "login" && <Login setToken={handleLogin} />}
+      {view === "register" && <Register />}
+      {view === "todos" && <TodoList token={token} />}
+      {view !== "todos" && (
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          {view === "login" ? (
+            <>
+              Don't have an account?{" "}
+              <button onClick={() => setView("register")}>Register</button>
+            </>
+          ) : (
+            <>
+              Already have an account?{" "}
+              <button onClick={() => setView("login")}>Login</button>
+            </>
+          )}
         </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      )}
     </div>
   );
-}
+};
 
 export default App;
